@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="ee6a3410-37bf-4bab-9177-467d89bc4953" >
+		<http:listener-connection host="0.0.0.0" port="8083" />
+	</http:listener-config>
+	<flow name="ebookFlow" doc:id="987a6ec9-3f9e-4b0b-b7e2-d68c28b274cf" >
+		<http:listener doc:name="Listener" doc:id="4801b087-36f6-4d4a-b364-59fb6ca6ef32" config-ref="HTTP_Listener_config" path="/ebook/{ID}"/>
+		<set-payload value="#[attributes.uriParams.ID]" doc:name="Set Payload" doc:id="49dadbd2-08dc-494d-aef7-71020ca3b2d3" />
+		<ee:transform doc:name="Transform Message" doc:id="863493f3-e1bb-4407-ad70-adc18b0cb752">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"ID" : 1
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="aae18ab6-4fe7-4527-a1a5-9a5dbf5a265c" message="#[payload]" />
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="3f9f562f-61f2-4c5e-8c7e-eb65374c4138" />
+		<set-variable value="" doc:name="Set Variable" doc:id="285dafec-cb93-4761-a019-7f54ad98847f" variableName="asd"/>
+	</flow>
+</mule>
